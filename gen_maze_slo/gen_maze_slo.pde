@@ -1,7 +1,7 @@
 
 class CellPos {
   int x, y;
-  
+
   CellPos(int x, int y) {
     this.x = x;
     this.y = y;
@@ -23,20 +23,20 @@ boolean whiledraw;
 
 ArrayList<CellPos> unvisited_n(CellPos cp) {
   ArrayList<CellPos> u = new ArrayList<CellPos>();
-  
+
   u.add(new CellPos(cp.x - 1, cp.y));
   u.add(new CellPos(cp.x, cp.y + 1));
   u.add(new CellPos(cp.x, cp.y - 1));
   u.add(new CellPos(cp.x + 1, cp.y));
-  
+
   for (int i = u.size() - 1; i >= 0; i--) {
     CellPos c = u.get(i);
-    
+
     if (visited[c.x][c.y]) {
       u.remove(i);
     }
   }
-  
+
   return u;
 }
 
@@ -48,19 +48,18 @@ void domaze() {
       horwalls[i][j] = true;
     }
   }
-  
+
   for (int i = 0; i < MAZE_SIZE; i++) {
     visited[i][0] = true;
     visited[0][i] = true;
     visited[MAZE_SIZE - 1][i] = true;
     visited[i][MAZE_SIZE - 1] = true;
-    
+
     verwalls[i][MAZE_SIZE] = true;
     horwalls[MAZE_SIZE][i] = true;
   }
-  
-  whiledraw = true;
 
+  whiledraw = true;
 }
 
 void setup() {
@@ -69,14 +68,14 @@ void setup() {
   MAZE_SIZE = s;
   CELLSIZE = 800 / (MAZE_SIZE * 1.0);
   WALLSIZE = CELLSIZE / 10.0;
-  
+
   visited = new boolean[MAZE_SIZE][MAZE_SIZE];
   cellstack = new ArrayList<CellPos>();
   verwalls = new boolean[MAZE_SIZE][MAZE_SIZE + 1];
   horwalls = new boolean[MAZE_SIZE + 1][MAZE_SIZE];
   currcell = new CellPos(1, 1);
   cellstack.add(currcell);
-  
+
   domaze();
 }
 
@@ -84,18 +83,18 @@ void draw() {
   background(0);
   stroke(255);
   fill(255);
-  
-    
+
+
   if (whiledraw & cellstack.size() > 0) {
     ArrayList<CellPos> neighbours = unvisited_n(currcell);
-    
+
     if (neighbours.size() > 0) {
       cellstack.add(0, currcell);
       currcell = neighbours.get((int)random(neighbours.size()));
       visited[currcell.x][currcell.y] = true;
-      
+
       CellPos old = cellstack.get(0);
-      
+
       if (old.x == currcell.x) {
         if (old.y > currcell.y) {
           horwalls[old.x][old.y] = false;
@@ -116,9 +115,9 @@ void draw() {
   } else {
     whiledraw = false;
   }
-  
+
   //translate(-CELLSIZE * 2, -CELLSIZE * 2);
-  
+
   for (int i = 0; i < MAZE_SIZE; i++) {
     for (int j = 0; j < MAZE_SIZE; j++) {
       if (verwalls[i][j]) {
@@ -129,7 +128,7 @@ void draw() {
       }
     }
   }
-  
+
   for (int i = 0; i < MAZE_SIZE; i++) {
     if (horwalls[MAZE_SIZE][i]) {
       rect(MAZE_SIZE * CELLSIZE, i * CELLSIZE, CELLSIZE, WALLSIZE);
@@ -142,7 +141,9 @@ void draw() {
 
 void keyPressed() {
   //s++;
-  s = 50;
-  println(s - 2);
-  setup();
+  if (keyCode == 'R') {
+    s = 50;
+    println(s - 2);
+    setup();
+  }
 }
