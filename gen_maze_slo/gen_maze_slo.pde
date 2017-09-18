@@ -1,4 +1,3 @@
-
 class CellPos {
   int x, y;
 
@@ -8,11 +7,11 @@ class CellPos {
   }
 }
 
-int MAZE_SIZE;
+int MAZE_X, MAZE_Y;
 float CELLSIZE;
 float WALLSIZE;
 
-int s = 10;
+int s = 50;
 
 CellPos currcell;
 ArrayList<CellPos> cellstack;
@@ -41,38 +40,40 @@ ArrayList<CellPos> unvisited_n(CellPos cp) {
 }
 
 void domaze() {
-  for (int i = 0; i < MAZE_SIZE; i++) {
-    for (int j = 0; j < MAZE_SIZE; j++) {
+  for (int i = 0; i < MAZE_X; i++) {
+    for (int j = 0; j < MAZE_Y; j++) {
       visited[i][j] = false;
       verwalls[i][j] = true;
       horwalls[i][j] = true;
     }
   }
 
-  for (int i = 0; i < MAZE_SIZE; i++) {
-    visited[i][0] = true;
-    visited[0][i] = true;
-    visited[MAZE_SIZE - 1][i] = true;
-    visited[i][MAZE_SIZE - 1] = true;
-
-    verwalls[i][MAZE_SIZE] = true;
-    horwalls[MAZE_SIZE][i] = true;
+  for (int x = 0; x < MAZE_X; x++) {
+    visited[x][0] = true;
+    verwalls[x][MAZE_Y] = true;
+    visited[x][MAZE_Y - 1] = true;
+  }
+  for (int y = 0; y < MAZE_Y; y++) {
+    visited[0][y] = true;
+    visited[MAZE_X - 1][y] = true;
+    horwalls[MAZE_X][y] = true;
   }
 
   whiledraw = true;
 }
 
 void setup() {
-  size(800, 800);
+  size(1280, 720);
 
-  MAZE_SIZE = s;
-  CELLSIZE = 800 / (MAZE_SIZE * 1.0);
+  CELLSIZE = height / (s * 1.0);
+  MAZE_X = (int)(width / CELLSIZE);
+  MAZE_Y = (int)(height / CELLSIZE);
   WALLSIZE = CELLSIZE / 10.0;
 
-  visited = new boolean[MAZE_SIZE][MAZE_SIZE];
+  visited = new boolean[MAZE_X][MAZE_Y];
   cellstack = new ArrayList<CellPos>();
-  verwalls = new boolean[MAZE_SIZE][MAZE_SIZE + 1];
-  horwalls = new boolean[MAZE_SIZE + 1][MAZE_SIZE];
+  verwalls = new boolean[MAZE_X][MAZE_Y + 1];
+  horwalls = new boolean[MAZE_X + 1][MAZE_Y];
   currcell = new CellPos(1, 1);
   cellstack.add(currcell);
 
@@ -118,8 +119,8 @@ void draw() {
 
   //translate(-CELLSIZE * 2, -CELLSIZE * 2);
 
-  for (int i = 0; i < MAZE_SIZE; i++) {
-    for (int j = 0; j < MAZE_SIZE; j++) {
+  for (int i = 0; i < MAZE_X; i++) {
+    for (int j = 0; j < MAZE_Y; j++) {
       if (verwalls[i][j]) {
         rect(i * CELLSIZE, j * CELLSIZE, WALLSIZE, CELLSIZE);
       }
@@ -129,14 +130,17 @@ void draw() {
     }
   }
 
-  for (int i = 0; i < MAZE_SIZE; i++) {
-    if (horwalls[MAZE_SIZE][i]) {
-      rect(MAZE_SIZE * CELLSIZE, i * CELLSIZE, CELLSIZE, WALLSIZE);
-    }
-    if (verwalls[i][MAZE_SIZE]) {
-      rect(i * CELLSIZE, MAZE_SIZE * CELLSIZE, WALLSIZE, CELLSIZE);
+  for (int x = 0; x < MAZE_X; x++) {
+    if (verwalls[x][MAZE_Y]) {
+      rect(x * CELLSIZE, MAZE_Y * CELLSIZE, WALLSIZE, CELLSIZE);
     }
   }
+  for (int y = 0; y < MAZE_Y; y++) {
+    if (horwalls[MAZE_X][y]) {
+      rect(MAZE_X * CELLSIZE, y * CELLSIZE, CELLSIZE, WALLSIZE);
+    }
+  }
+  
 }
 
 void keyPressed() {

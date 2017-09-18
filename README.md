@@ -4,3 +4,5 @@ Maze generation algorithms in Processing, by random walking and "knocking down" 
 ![screenshot](https://github.com/elterminad0r/mazes/blob/master/screenshots/nopath.png)
 ![screenshot](https://github.com/elterminad0r/mazes/blob/master/screenshots/path.png)
 ![screenshot](https://github.com/elterminad0r/mazes/blob/master/screenshots/slo.png)
+
+The slow version has [this](https://youtu.be/RDCxf3rzJrw) video.
